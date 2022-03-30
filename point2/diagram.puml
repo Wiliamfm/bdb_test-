@@ -1,0 +1,37 @@
+@startuml test
+node "User's computer" as user{
+ component "Web browser" as web_browser{
+ }
+}
+
+node "Heroku" as h1 {
+    component "Springboot <i><<application>></i>" as spring{
+    }
+
+    artifact ".git" as git{
+    }
+
+    node "Tomcat Server" as app_server {
+
+        artifact "myapp.jar" as jar{
+        }
+    }
+
+    card  apppro [
+        <i><<deplyment spec>></i>
+        --
+        application.properties
+    ]
+}
+
+node "Heroku" as h2 {
+ database "Postgresql" as db{
+ }
+}
+
+user -- h1 : <i><<https protocol>></i>
+h1 -- h2 : <i><<https protocol>></i>
+spring ..> jar: <i><<manifest>></i>
+apppro ..> spring
+git -- spring : <i><<https protocol>></i>
+@enduml
