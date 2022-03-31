@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Data } from '@angular/router';
 
 @Component({
   selector: 'app-create-person',
@@ -15,30 +14,33 @@ export class CreatePersonComponent implements OnInit {
   }
   
   submitForm(event:SubmitEvent): void {
-    let create_person_url= "http://localhot:8080/persons";
+    let create_person_url= "http://localhost:8080/persons";
     event.preventDefault();
     let form= <HTMLFormElement> event.currentTarget;
-    let fatherName= form['father'].value
-    let motherName= form['mother'].value
-    if(fatherName){
-      fetch(create_person_url+"/"+fatherName)
-      .then(response => {
-        console.log(response);
-      });
-    }
-    if(motherName){
-      fetch(create_person_url+"/"+motherName)
-      .then(response => {
-        console.log(response);
-      });
-    }
     let data= {
+      document: form['document'].value,
       full_name: form['full_name'].value,
       birth_date: form['birth_date'].value,
+      father: form['father'].value,
+      mother: form['mother'].value
     };
     //alert(typeof(form['birth_date'].value));
     //alert(JSON.stringify(data));
-    fetch("")
+    fetch(create_person_url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+    .then(data => {
+      console.log(data);
+      alert(`Persona ${data['full_name']} creada con éxito.`)
+      form.reset();
+    }).catch(err => {
+      console.log('Can not create the person: ', err);
+      alert('Ya existe una persona con el documento: '+ form['document'].value);
+    })
   }
 
 }

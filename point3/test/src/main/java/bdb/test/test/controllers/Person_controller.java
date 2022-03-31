@@ -48,23 +48,27 @@ public class Person_controller {
 
     @PostMapping
     public ResponseEntity<Person> createPerson(@RequestBody Map<String, Object> data){
-        String id= data.get("document").toString().toLowerCase().trim();
-        String fullName= data.get("full_name").toString().toLowerCase().trim();
-        String birth_date= data.get("birth_date").toString().toLowerCase().trim();
-        String fatherDocument= "";
-        String motherDocument= "";
-        if(data.get("father") != null){
-            fatherDocument= data.get("father").toString().toLowerCase().trim();
+        try{
+            String id= data.get("document").toString().toLowerCase().trim();
+            String fullName= data.get("full_name").toString().toLowerCase().trim();
+            String birth_date= data.get("birth_date").toString().toLowerCase().trim();
+            String fatherDocument= "";
+            String motherDocument= "";
+            if(data.get("father") != null){
+                fatherDocument= data.get("father").toString().toLowerCase().trim();
+            }
+            Optional<Person> optionalFather= personRepository.findById(fatherDocument);
+            Person father= optionalFather.isPresent()? optionalFather.get():null;
+            if(data.get("mother") != null){
+                motherDocument= data.get("mother").toString().toLowerCase().trim();
+            }
+            Optional<Person> optionalMother= personRepository.findById(motherDocument);
+            Person mother= optionalMother.isPresent()? optionalMother.get():null;
+            Person person= personRepository.save(new Person(id, fullName, LocalDate.parse(birth_date), father, mother));
+            return ResponseEntity.status(HttpStatus.CREATED).body(person);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-        Optional<Person> optionalFather= personRepository.findById(fatherDocument);
-        Person father= optionalFather.isPresent()? optionalFather.get():null;
-        if(data.get("mother") != null){
-            motherDocument= data.get("mother").toString().toLowerCase().trim();
-        }
-        Optional<Person> optionalMother= personRepository.findById(motherDocument);
-        Person mother= optionalMother.isPresent()? optionalMother.get():null;
-        Person person= personRepository.save(new Person(id, fullName, LocalDate.parse(birth_date), father, mother));
-        return ResponseEntity.status(HttpStatus.CREATED).body(person);
     }
     
 }
