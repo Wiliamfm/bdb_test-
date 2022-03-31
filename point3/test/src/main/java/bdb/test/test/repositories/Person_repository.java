@@ -15,4 +15,7 @@ public interface Person_repository extends CrudRepository<Person, String>{
     @Query(value = "SELECT ps FROM person ps WHERE ps.full_name = ?1")
     Optional<List<Person>> findByFullName(String fullName);
 
+    @Query("SELECT ps FROM person ps WHERE ps.father.id = ?1")
+    Optional<List<Person>> findChilds(String id);
+
 }

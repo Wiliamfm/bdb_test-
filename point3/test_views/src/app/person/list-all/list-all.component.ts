@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Person } from 'src/app/interfaces/person';
+import { PersonService } from 'src/app/services/person.service';
 
 @Component({
   selector: 'app-list-all',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListAllComponent implements OnInit {
 
-  constructor() { }
+  persons: Person[] = [];
+  
+  constructor(private personService: PersonService) { }
 
   ngOnInit(): void {
+    this.getPersons();
+  }
+
+  getPersons() {
+    this.personService.getPerson().subscribe(persons => this.persons= persons);
   }
 
 }

@@ -1,15 +1,12 @@
 package bdb.test.test.pojos;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.transaction.Transactional;
 
 @Entity(name = "person")
 public class Person{
@@ -27,8 +24,6 @@ public class Person{
     @ManyToOne
     @JoinColumn(name = "mother", nullable = true, referencedColumnName = "id")
     private Person mother;
-    @OneToMany
-    private Set<Person> childSet;
 
     protected Person(){};
 
@@ -44,20 +39,6 @@ public class Person{
         this.birth_date= birth_date;
         this.father= father;
         this.mother= mother;
-    }
-
-    @Transactional
-    public boolean adopt(Person child){
-        if(child.father == null){
-            this.childSet.add(child);
-            child.setFather(this);
-            return true;
-        }else if(child.mother == null){
-            this.childSet.add(child);
-            child.setMother(mother);
-            return true;
-        }
-        return false;
     }
 
     @Override

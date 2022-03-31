@@ -1,2 +1,18 @@
 @startuml person_diagram
+
+class Person {
+    - id: String
+    - full_name: String
+    - birth_date: Date
+    - father: Person
+    - mother: Person
+    - childs: List<Person>
+    --
+    # Person()
+    + Person(id:String, full_name:String)
+    + Person(id:String, full_name:String, birth_date:Date, father:Person, mother:Person)
+    + adopt(child: Person): bool
+}
+
+Person -- Person : 0..*
 @enduml

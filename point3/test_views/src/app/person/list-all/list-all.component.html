@@ -1,1 +1,39 @@
-<p>list-all works!</p>
+<h1 class="text-center">List of Persons</h1>
+<table id="person_table" class="table">
+    <thead>
+        <tr>
+            <td>Document</td>
+            <td>Name</td>
+            <td>Birth date</td>
+            <td>Father</td>
+            <td>Mother</td>
+            <td>Childs</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let person of persons">
+            <td>{{ person.id }}</td>
+            <td>{{ person.full_name }}</td>
+            <td>{{ person.birth_date }}</td>
+            <td>
+                <ul *ngIf="person.father; else fatherTemplate">
+                    <li>{{ person.father.id }}</li>
+                    <li>{{ person.father.full_name }}</li>
+                </ul>
+                <ng-template #fatherTemplate>
+                    Without fahter
+                </ng-template>
+            </td>
+            <td>
+                <ul *ngIf="person.mother; else motherTemplate">
+                    <li>{{ person.mother.id }}</li>
+                    <li>{{ person.mother.full_name }}</li>
+                </ul>
+                <ng-template #motherTemplate>
+                    Without mother
+                </ng-template>
+            </td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>

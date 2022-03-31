@@ -1,10 +1,8 @@
 package bdb.test.test.controllers;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,37 +11,36 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import bdb.test.test.pojos.Person;
-import bdb.test.test.repositories.Person_repository;
+import bdb.test.test.services.PersonService;
 
 @RestController
 @RequestMapping("/persons")
 @CrossOrigin
 public class Person_controller {
 
-    private Person_repository personRepository;
+    private PersonService personService;
 
     @Autowired
-    public void setPersonRepository(Person_repository person_repository){
-        personRepository= person_repository;
+    public void setPersonRepository(PersonService personService){
+        this.personService= personService;
     }
 
     @GetMapping
     public ResponseEntity<List<Person>> getPersons(){
-        List<Person> persons= new ArrayList<Person>();
-        personRepository.findAll().forEach(persons::add);
+        List<Person> persons= personService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(persons);
     }
 
     @GetMapping("/{fullName}")
     public ResponseEntity<List<Person>> getPerson(@PathVariable("fullName") String fullName){
-        Optional<List<Person>> optional= personRepository.findByFullName(fullName);
-        List<Person> person= optional.isPresent() ? optional.get():null;
-        return ResponseEntity.status(HttpStatus.OK).body(person);
+        List<Person> persons= personService.findByFullName(fullName);
+        return ResponseEntity.status(HttpStatus.OK).body(persons);
     }
 
     @PostMapping
@@ -57,17 +54,41 @@ public class Person_controller {
             if(data.get("father") != null){
                 fatherDocument= data.get("father").toString().toLowerCase().trim();
             }
-            Optional<Person> optionalFather= personRepository.findById(fatherDocument);
-            Person father= optionalFather.isPresent()? optionalFather.get():null;
+            Person father= personService.findById(fatherDocument);
             if(data.get("mother") != null){
                 motherDocument= data.get("mother").toString().toLowerCase().trim();
             }
-            Optional<Person> optionalMother= personRepository.findById(motherDocument);
-            Person mother= optionalMother.isPresent()? optionalMother.get():null;
-            Person person= personRepository.save(new Person(id, fullName, LocalDate.parse(birth_date), father, mother));
+            Person mother= personService.findById(motherDocument);
+            Person person= personService.save(new Person(id, fullName, LocalDate.parse(birth_date), father, mother));
             return ResponseEntity.status(HttpStatus.CREATED).body(person);
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<Boolean> adoptPerson(@RequestBody Map<String, String> data){
+        try {
+            String idFather= data.get("father_document");
+            String idMother= data.get("mother_document");
+            String idChild= data.get("child_document").toString().toLowerCase().trim();
+            boolean f= false;
+            boolean m= false;
+            if(idFather != null){
+                idFather.toString().toLowerCase().trim();
+                f= personService.adopt(idFather, idChild, false);
+            }
+            if(idMother != null){
+                idMother.toString().toLowerCase().trim();
+                m= personService.adopt(idMother, idChild, true);
+            }
+            if(f || m){
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(true);
+            }else{
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(false);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
     }
     

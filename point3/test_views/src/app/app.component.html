@@ -1,4 +1,19 @@
-<app-header></app-header>
-<h1 class="text-center">{{title}}</h1>
-<app-create-person></app-create-person>
-<app-list-all></app-list-all>
+<div class="container">
+    <ul class="nav justify-content-center nav-pills">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/persons/new">Create Person</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/persons">See all persons</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/persons/adopt">Adopt</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/">Home</a>
+        </li>
+    </ul>
+</div>
+<div class="container">
+    <router-outlet></router-outlet>
+</div>
