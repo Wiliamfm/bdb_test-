@@ -15,6 +15,9 @@ jobs:
           name: "go to spring folder"
           command: "cd point3/test/"
       - run:
+          name: "list folders"
+          command: "ls -a"
+      - run:
           name: "spring tests"
           command: "./gradlew test"
 
