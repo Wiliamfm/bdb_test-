@@ -66,14 +66,16 @@ public class Person_controller {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<Boolean> adoptPerson(@RequestBody Map<String, String> data){
+    @PutMapping("/{id_child}")
+    public ResponseEntity<Boolean> adoptPerson(@PathVariable("id_child") String idChild,  @RequestBody Map<String, String> data){
         try {
             String idFather= data.get("father_document");
             String idMother= data.get("mother_document");
-            String idChild= data.get("child_document").toString().toLowerCase().trim();
             boolean f= false;
             boolean m= false;
+            if(idFather.equals(idChild) || idFather.equals(idMother) || idMother.equals(idChild)){
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(false);
+            }
             if(idFather != null){
                 idFather.toString().toLowerCase().trim();
                 f= personService.adopt(idFather, idChild, false);
@@ -83,7 +85,7 @@ public class Person_controller {
                 m= personService.adopt(idMother, idChild, true);
             }
             if(f || m){
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(true);
+                return ResponseEntity.status(HttpStatus.OK).body(true);
             }else{
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(false);
             }
