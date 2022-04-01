@@ -1,4 +1,8 @@
-# List of command to make the point 1 using Linux and Git.
+# Point 1
+
+To create the workflow follow the commands below or run the bash file found in this folder (the file is point1.sh).
+
+## List of command to make the point 1 using Linux and Git.
 - git init
 - touch README.md
 - git add .
