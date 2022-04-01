@@ -12,6 +12,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: "list folders"
+          command: "ls -a"
+      - run:
           name: "go to spring folder"
           command: "cd point3/test/"
       - run:
