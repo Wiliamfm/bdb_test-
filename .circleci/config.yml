@@ -9,7 +9,7 @@ jobs:
     docker:
       - image: cimg/openjdk:17.0.1
       #resource_class: medium
-      - image: cimg/postgres
+      - image: cimg/postgres:14.0
     steps:
       - checkout
       - run:
