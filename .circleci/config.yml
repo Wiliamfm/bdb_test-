@@ -12,8 +12,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "list folders"
-          command: "ls -a"
+          name: "install postgres"
+          command: "apt-get update -qq && apt-get install -y postgresql"
       - run:
           name: "spring tests"
           working_directory: ./point3/test/
