@@ -19,8 +19,10 @@ jobs:
           command: "echo Hello, World!"
 
   spring-test:
-    executor:
-      image: ubuntu
+    build:
+      machine:
+        image: ubuntu-2004:current
+      resource_class: medium
     steps:
       - checkout
       - run:
