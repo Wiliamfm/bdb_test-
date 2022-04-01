@@ -7,7 +7,7 @@ version: 2.1
 jobs:
   spring-test:
     machine:
-      - image: buntu-2004:current
+      - image: ubuntu-2004:current
     resource_class: medium
     steps:
       - checkout
