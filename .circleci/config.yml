@@ -11,12 +11,12 @@ jobs:
     resource_class: medium
     steps:
       - checkout
-      - working_directory: ~/point3/test/
       - run:
           name: "list folders"
           command: "ls -a"
       - run:
           name: "spring tests"
+          working_directory: ~/point3/test/
           command: "./gradlew test"
 
 # Invoke jobs via workflows
