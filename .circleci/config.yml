@@ -6,23 +6,18 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   spring-test:
-    machine:
-      image: ubuntu-2004:current
+    docker:
+      image: cimg/openjdk:17.0.1
     resource_class: medium
     steps:
       - checkout
-      - run:
-          name: "list folders"
-          command: "ls -a"
-      - run:
-          name: "go to spring folder"
-          command: "cd point3/test/"
+      - working_directory: ~/point3/test/
       - run:
           name: "list folders"
           command: "ls -a"
       - run:
           name: "spring tests"
-          command: "point3/test/gradlew test"
+          command: "./gradlew test"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
