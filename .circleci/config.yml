@@ -13,6 +13,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: "java version"
+          command: "java --version"
+      - run:
           name: "spring tests"
           working_directory: ./point3/test/
           command: "./gradlew test"
