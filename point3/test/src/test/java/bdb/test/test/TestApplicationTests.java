@@ -5,28 +5,20 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.expression.spel.support.ReflectivePropertyAccessor.OptimalPropertyAccessor;
 
 import bdb.test.test.pojos.Person;
 import bdb.test.test.repositories.Person_repository;
 import bdb.test.test.services.PersonService;
 
-@SpringBootTest
+@SpringBootTest(classes = PersonService.class)
 class TestApplicationTests {
 
 	@MockBean
@@ -69,10 +61,21 @@ class TestApplicationTests {
 		//another child
 		Mockito.when(person_repository.findById(p3.getId())).thenReturn(Optional.ofNullable(p3));
 
+		//Already has parent.
 		boolean wasAdopted= personService.adopt(p.getId(), p3.getId(), false);
+		//Can adopt.
 		boolean wasAdopted2= personService.adopt(p.getId(), p2.getId(), false);
+		//Can not adopt itself
+		boolean wasAdopted3= personService.adopt(p.getId(), p.getId(), false);
+		//Can not adopt own father
+		boolean wasAdopted4= personService.adopt(p3.getId(), p1.getId(), false);
+		//Can not adopt own mother
+		boolean wasAdopted5= personService.adopt(p3.getId(), p2.getId(), false);
 		assertFalse(wasAdopted);
 		assertTrue(wasAdopted2);
+		assertFalse(wasAdopted3);
+		assertFalse(wasAdopted4);
+		assertFalse(wasAdopted5);
 	}
 
 	@Test

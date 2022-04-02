@@ -56,22 +56,38 @@ public class PersonService{
         Person parent= findById(id);
         Person child= findById(idChild);
         if(parent != null && child != null){
-            if(isMother){
-                if(child.getMother() == null){
-                    child.setMother(parent);
-                    personRepository.save(child);
-                    return true;
+            if(!parent.getId().equalsIgnoreCase(child.getId())){
+                if(!isParent(parent, child.getId())){
+                    if(isMother){
+                        if(child.getMother() == null){
+                            child.setMother(parent);
+                            personRepository.save(child);
+                            return true;
+                        }
+                        return false;
+                    }else{
+                        if(child.getFather() == null){
+                            child.setFather(parent);
+                            personRepository.save(child);
+                            return true;
+                        }
+                        return false;
+                    }
                 }
-                return false;
-            }else{
-                if(child.getFather() == null){
-                    child.setFather(parent);
-                    personRepository.save(child);
-                    return true;
-                }
-                return false;
             }
         }
         return false;
+    }
+
+    private boolean isParent(Person person, String id) {
+        if(person != null){
+            if(person.getId().equalsIgnoreCase(id)){
+                return true;
+            }else {
+                return isParent(person.getFather(), id) || isParent(person.getMother(), id);
+            }
+        }else{
+            return false;
+        }
     }
 }
