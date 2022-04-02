@@ -18,7 +18,7 @@ jobs:
       - run:
           name: "spring tests"
           working_directory: ./point3/test/
-          command: "./gradlew bootRun"
+          command: "./gradlew test"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
