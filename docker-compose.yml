@@ -1,0 +1,14 @@
+version: 2
+services:
+  postgres:
+    build: ./point3/postgres/
+  spring-app:
+    build: ./point3/test/
+    depends_on:
+      - postgres
+  angular-app:
+    build: ./point3/test_views/
+    ports:
+      - 4200:4200
+    depends_on:
+      - spring-app
