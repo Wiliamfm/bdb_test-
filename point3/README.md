@@ -5,7 +5,7 @@
 ### Download the postgres image:
 
 1. You need to have docker installed.
-2. run the command: docker run -dp 5432:5432 wfonsecamfm/db-postgres-test
+2. run the command: docker run --rm -dp 5432:5432 wfonsecamfm/db-postgres-test
 
 ### Get the spring app:
 
